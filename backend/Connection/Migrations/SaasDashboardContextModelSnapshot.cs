@@ -604,6 +604,32 @@ namespace Connection.Migrations
                     b.ToTable("DiscoveriesPlatforms");
                 });
 
+            modelBuilder.Entity("Connection.models.Entites.Domain", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("TenantId")
+                        .IsUnique();
+
+                    b.ToTable("Domains");
+                });
+
             modelBuilder.Entity("Connection.models.Entites.Payment", b =>
                 {
                     b.Property<int>("Id")
@@ -1152,7 +1178,7 @@ namespace Connection.Migrations
                     b.HasIndex("Name", "TenantId")
                         .IsUnique();
 
-                    b.ToTable("TenantPlan");
+                    b.ToTable("TenantPlans");
                 });
 
             modelBuilder.Entity("Connection.models.User", b =>
@@ -1273,6 +1299,17 @@ namespace Connection.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Connection.models.Entites.Domain", b =>
+                {
+                    b.HasOne("Connection.models.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("Connection.models.Entites.Payment", b =>

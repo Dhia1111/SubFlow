@@ -42,7 +42,10 @@ namespace Connection.Data
         public virtual DbSet<TenantFreePlan> TenantsFreePlans { get; set; } = null!;
         public virtual DbSet<DiscoveryPlatform> DiscoveriesPlatforms { get; set; } = null!;
 
-        public virtual DbSet<ClientSubscription>ClientSubscriptions { get; set; } = null!;
+        public virtual DbSet<ClientSubscription> ClientSubscriptions { get; set; } = null!;
+
+        public virtual DbSet<Domain> Domains { get; set; } = null!;
+
         public SaasDashboardContext(DbContextOptions<SaasDashboardContext> options, ITenantIdProvider dataKeyProvider) :base(options) {
 
                 _TenantID = dataKeyProvider.TenantId;
@@ -75,6 +78,14 @@ namespace Connection.Data
             modelBuilder.Entity<Tenant>()
        .HasIndex(u => u.Name)
        .IsUnique();
+            
+            modelBuilder.Entity<Domain>()
+ .HasIndex(u => u.Name)
+ .IsUnique();
+
+            modelBuilder.Entity<Domain>()
+ .HasIndex(u => u.TenantId)
+ .IsUnique();
 
             modelBuilder.Entity<User>()
   .HasIndex(u => new { u.TenantId, u.Id })
